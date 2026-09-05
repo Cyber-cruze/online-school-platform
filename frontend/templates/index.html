@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Стимул — онлайн-школа</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/site.css">
+  <script src="/static/js/application.js" defer></script>
+</head>
+<body>
+  <div class="site-header">
+    <div class="wrap">
+      <header>
+        <a class="logo" href="#top">СТИМУЛ</a>
+        <nav>
+          <a href="#features">О занятиях</a>
+          <a href="#teachers">Преподаватели</a>
+          <a href="#format">Формат</a>
+        </nav>
+        <div class="header-contacts">
+          <a href="tel:+79055188365">+7 905 518-83-65</a>
+          <a href="tel:+79685742629">+7 968 574-26-29</a>
+        </div>
+        <a class="header-link" href="#application">Оставить заявку</a>
+      </header>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <div class="hero-title">
+          <img class="hero-logo" src="/diploma.png" alt="Логотип школы Стимул">
+          <h1>Онлайн-школа для детей и подростков</h1>
+        </div>
+        <p class="hero-text">Помогаем уверенно разбираться в школьных предметах, готовиться к экзаменам и открывать новые возможности.</p>
+      </div>
+      <div class="hero-art" id="application">
+        <div id="application-result" class="application-result">
+          <form class="lead-form" id="application-form" action="https://api.web3forms.com/submit" method="POST">
+            <h2>Оставить заявку</h2>
+            <p>Познакомимся и подберём удобное время для занятия.</p>
+            <input type="hidden" name="access_key" value="6f7c5b18-8651-4a1c-83ad-89c42d1ad9d4">
+            <input type="hidden" name="subject" value="Новая заявка с сайта «Стимул»">
+            <input type="hidden" name="from_name" value="Сайт школы «Стимул»">
+            <input class="botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off">
+            <input required name="name" placeholder="Ваше имя" aria-label="Ваше имя">
+            <input required name="phone" type="tel" placeholder="Телефон" aria-label="Телефон">
+            <input required name="email" type="email" placeholder="Электронная почта" aria-label="Электронная почта">
+            <button type="submit">Отправить заявку</button>
+            <p class="lead-status" id="application-status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="teachers wrap" id="teachers">
+      <div class="section-head"><h2>Наши преподаватели</h2></div>
+      <div class="teacher-grid">{{TEACHERS}}</div>
+    </section>
+
+    <section class="features wrap" id="features">
+      <div class="features-intro"><h2>Как проходят занятия</h2></div>
+      <div class="format-grid" id="format">
+        <article class="format-card format-card-online">
+          <div class="format-card-head">
+            <span class="format-icon" aria-hidden="true">
+              <img src="/static/images/online.png" alt="">
+            </span>
+            <h3>Онлайн</h3>
+          </div>
+          <p>Занятия из любой точки по видеосвязи. Используем интерактивную доску, понятные материалы и сразу закрепляем тему на практике.</p>
+        </article>
+        <article class="format-card format-card-offline">
+          <div class="format-card-head">
+            <span class="format-icon" aria-hidden="true">
+              <img src="/static/images/offline.png" alt="">
+            </span>
+            <h3>Очно</h3>
+          </div>
+          <p>Личные встречи с преподавателем в комфортной обстановке. Больше живого общения, внимания и практики в удобном темпе.</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" id="contacts">
+    <div class="wrap footer-main">
+      <div class="footer-intro">
+        <p class="footer-kicker">Учиться с интересом</p>
+        <a class="footer-wordmark" href="#top">СТИМУЛ</a>
+        <p class="footer-description">Помогаем детям и подросткам разобраться в школьной программе, подготовиться к экзаменам и почувствовать уверенность в своих знаниях.</p>
+        <a class="footer-cta" href="#application">Оставить заявку <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="footer-contact-card">
+        <p class="footer-contact-title">Контакты</p>
+        <a href="tel:+79055188365">
+          <span>Основной номер</span>
+          <strong>+7 905 518-83-65</strong>
+        </a>
+        <a href="tel:+79685742629">
+          <span>Дополнительный номер</span>
+          <strong>+7 968 574-26-29</strong>
+        </a>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <nav class="footer-nav" aria-label="Навигация в нижней части сайта">
+        <a href="#features">О занятиях</a>
+        <a href="#teachers">Преподаватели</a>
+        <a href="#format">Формат</a>
+      </nav>
+      <span>© 2026 Стимул</span>
+      <a href="#top">Наверх ↑</a>
+    </div>
+  </footer>
+</body>
+</html>

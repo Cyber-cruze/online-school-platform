@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Стимул — вход в админку</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="login-body">
+  <main class="login-shell">
+    <a class="login-brand" href="/">СТИМУЛ</a>
+    <section class="login-card">
+      <p class="login-kicker">Администратор</p>
+      <h1>Вход в админку</h1>
+      <p class="login-description">Введите логин и пароль, чтобы управлять преподавателями.</p>
+      <form class="login-form" action="/admin/login" method="POST">
+        <label>Логин<input name="username" autocomplete="username" required autofocus></label>
+        <label>Пароль<input name="password" type="password" autocomplete="current-password" required></label>
+        <p class="login-error" aria-live="polite">{{ERROR}}</p>
+        <button type="submit">Войти</button>
+      </form>
+    </section>
+    <a class="back-link" href="/">← Вернуться на сайт</a>
+  </main>
+</body>
+</html>

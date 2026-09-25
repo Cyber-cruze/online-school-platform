@@ -13,15 +13,42 @@ def _template(filename: str) -> str:
 
 def render_public_teacher(teacher: Teacher) -> str:
     return f'''<article class="teacher">
-      <div class="photo"><img src="{escape(teacher.photo)}" alt="{escape(teacher.name)}"></div>
-      <div class="teacher-info"><h3>{escape(teacher.name)}</h3><span class="subject">{escape(teacher.subject)}</span><p>{escape(teacher.bio)}</p></div>
+      <div class="teacher-card-head">
+        <div class="photo">
+          <img class="photo-main" src="{escape(teacher.photo)}" alt="{escape(teacher.name)}">
+        </div>
+        <div class="teacher-identity">
+          <h3>{escape(teacher.name)}</h3>
+          <span class="subject">{escape(teacher.subject)}</span>
+        </div>
+      </div>
+      <p class="teacher-bio">{escape(teacher.bio)}</p>
     </article>'''
 
 
 def render_admin_teacher(teacher: Teacher) -> str:
     return f'''<article class="teacher-card">
-      <img src="{escape(teacher.photo)}" alt="{escape(teacher.name)}">
-      <div class="teacher-card-info"><h2>{escape(teacher.name)}</h2><span>{escape(teacher.subject)}</span><p>{escape(teacher.bio)}</p><button class="delete" hx-delete="/teachers/{escape(teacher.id)}" hx-target="#teacher-list" hx-swap="innerHTML" hx-confirm="Удалить преподавателя?">Удалить</button></div>
+      <div class="teacher-card-head">
+        <img src="{escape(teacher.photo)}" alt="{escape(teacher.name)}">
+        <div class="teacher-card-identity">
+          <h2>{escape(teacher.name)}</h2>
+          <span>{escape(teacher.subject)}</span>
+        </div>
+      </div>
+      <p class="teacher-card-bio">{escape(teacher.bio)}</p>
+      <div class="teacher-card-actions">
+        <button class="delete edit-button" type="button" data-edit-toggle="teacher-editor-{escape(teacher.id)}" aria-expanded="false">Редактировать</button>
+        <button class="delete" hx-delete="/teachers/{escape(teacher.id)}" hx-target="#teacher-list" hx-swap="innerHTML" hx-confirm="Удалить преподавателя?">Удалить</button>
+      </div>
+      <div class="teacher-editor" id="teacher-editor-{escape(teacher.id)}" hidden>
+        <form hx-put="/teachers/{escape(teacher.id)}" hx-encoding="multipart/form-data" hx-target="#teacher-list" hx-swap="innerHTML">
+          <label>Имя преподавателя<textarea class="compact-field" name="name" required>{escape(teacher.name)}</textarea></label>
+          <label>Предмет<textarea class="compact-field" name="subject" required>{escape(teacher.subject)}</textarea></label>
+          <label>Краткая информация<textarea name="bio" required>{escape(teacher.bio)}</textarea></label>
+          <label>Новая фотография <small>необязательно</small><input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+          <button class="save-button" type="submit">Сохранить изменения</button>
+        </form>
+      </div>
     </article>'''
 
 

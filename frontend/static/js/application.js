@@ -12,9 +12,31 @@ applicationForm?.addEventListener("submit", async (event) => {
   status.textContent = "";
 
   try {
+    const formData = new FormData(applicationForm);
+    const name = String(formData.get("name") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+
+    formData.set("subject", "Заявка на консультацию — школа Стимул");
+    formData.set("from_name", "Онлайн-школа Стимул");
+    formData.set(
+      "message",
+      [
+        "Получена заявка с сайта онлайн-школы «Стимул».",
+        "",
+        `Имя: ${name}`,
+        `Телефон: ${phone}`,
+        `Электронная почта: ${email}`,
+        "",
+        "Посетитель ожидает обратной связи по указанным контактам.",
+      ].join("\n"),
+    );
+    formData.delete("name");
+    formData.delete("phone");
+
     const response = await fetch(applicationForm.action, {
       method: "POST",
-      body: new FormData(applicationForm),
+      body: formData,
     });
     const result = await response.json();
     if (!response.ok || !result.success) throw new Error("Web3Forms rejected submission");

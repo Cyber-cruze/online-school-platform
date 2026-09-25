@@ -32,6 +32,10 @@ def is_authenticated(cookie_header: str | None) -> bool:
     return bool(session and hmac.compare_digest(session.value, _SESSION_TOKEN))
 
 
+def session_token() -> str:
+    return _SESSION_TOKEN
+
+
 def create_session_cookie() -> str:
     return (
         f"{SESSION_COOKIE_NAME}={_SESSION_TOKEN}; "

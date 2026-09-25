@@ -34,6 +34,7 @@ input, textarea {
 
 input:focus, textarea:focus { border-color: #3b8daf; box-shadow: 0 0 0 4px rgba(59, 141, 175, .14); }
 textarea { min-height: 112px; resize: vertical; }
+.compact-field { min-height: 72px; }
 input[type="file"] { padding: 11px; background: rgba(255, 255, 255, .82); }
 
 .add-button {
@@ -50,13 +51,22 @@ input[type="file"] { padding: 11px; background: rgba(255, 255, 255, .82); }
 }
 
 #teacher-list { display: grid; grid-template-columns: 1fr; gap: 24px; }
-.teacher-card { display: grid; grid-template-columns: 300px 1fr; overflow: hidden; border: 1px solid #e3e5e1; border-radius: 20px; background: var(--white); box-shadow: 0 8px 30px rgba(32, 32, 32, .05); }
-.teacher-card img { display: block; width: 100%; height: 100%; min-height: 330px; background: #eaf7fd; object-fit: cover; }
-.teacher-card-info { display: flex; align-items: flex-start; justify-content: center; flex-direction: column; padding: 34px 40px; }
-.teacher-card h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.2; }
-.teacher-card span { display: inline-flex; padding: 8px 12px; border-radius: 50px; background: var(--sky); font-size: 15px; font-weight: 800; }
-.teacher-card p { width: 100%; margin: 22px 0 0; padding-top: 20px; border-top: 1px solid #e3e5e1; font-size: 18px; line-height: 1.7; }
-.delete { margin-top: 24px; padding: 10px 14px; border: 1px solid rgba(181, 78, 66, .2); border-radius: 8px; background: var(--white); color: var(--danger); cursor: pointer; font-size: 14px; font-weight: 800; }
+.teacher-card { padding: 32px; border: 1px solid #e3e5e1; border-radius: 20px; background: var(--white); box-shadow: 0 8px 30px rgba(32, 32, 32, .05); }
+.teacher-card-head { display: grid; grid-template-columns: 260px minmax(0, 1fr); align-items: center; }
+.teacher-card img { display: block; justify-self: center; width: 220px; height: 220px; border: 8px solid #eaf7fd; border-radius: 50%; background: var(--white); box-shadow: 0 12px 30px rgba(32, 32, 32, .1); object-fit: cover; object-position: center 25%; }
+.teacher-card-identity { display: flex; align-items: flex-start; flex-direction: column; padding: 8px 12px 8px 24px; }
+.teacher-card h2 { margin: 0 0 12px 12px; font-size: 24px; line-height: 1.2; white-space: pre-wrap; }
+.teacher-card span { display: inline-flex; padding: 8px 12px; border-radius: 50px; background: var(--sky); font-size: 15px; font-weight: 800; white-space: pre-wrap; }
+.teacher-card p { width: 100%; margin: 22px 0 0; padding-top: 20px; border-top: 1px solid #e3e5e1; font-size: 18px; line-height: 1.7; white-space: pre-wrap; }
+.teacher-card-actions { display: flex; align-items: center; justify-content: flex-start; gap: 18px; width: 100%; margin-top: 24px; }
+.edit-button, .delete { padding: 10px 14px; border-radius: 8px; background: var(--white); cursor: pointer; font-size: 14px; font-weight: 800; }
+.teacher-editor { width: 100%; margin-top: 18px; }
+.teacher-editor[hidden] { display: none; }
+.teacher-editor form { width: 100%; padding: 22px; border-radius: 14px; background: #f2f9fc; }
+.teacher-editor label small { color: #68757a; font-weight: 500; }
+.save-button { grid-column: 1 / -1; justify-self: start; padding: 13px 18px; border: 0; border-radius: 9px; background: var(--ink); color: var(--white); cursor: pointer; font-weight: 800; }
+.delete { border: 1px solid rgba(181, 78, 66, .2); color: var(--danger); }
+.edit-button { border-color: #76bfdf; background: var(--white); color: #3b8daf; }
 .empty { margin: 0; padding: 38px; border: 1px dashed #bcc7c0; border-radius: 14px; font-size: 16px; text-align: center; }
 
 .login-body {
@@ -119,9 +129,11 @@ input[type="file"] { padding: 11px; background: rgba(255, 255, 255, .82); }
 .back-link:hover { text-decoration: underline; }
 
 @media (max-width: 700px) {
-  .teacher-card { grid-template-columns: 1fr; }
-  .teacher-card img { height: 310px; min-height: 0; }
-  .teacher-card-info { padding: 27px 23px; }
+  .teacher-card { padding: 27px 23px; }
+  .teacher-card-head { grid-template-columns: 1fr; }
+  .teacher-card img { width: 200px; height: 200px; }
+  .teacher-card-identity { align-items: center; padding: 25px 0 0; text-align: center; }
+  .teacher-card h2 { margin-left: 0; }
 }
 
 @media (max-width: 600px) {
@@ -134,7 +146,7 @@ input[type="file"] { padding: 11px; background: rgba(255, 255, 255, .82); }
   main { padding: 48px 0 72px; }
   .editor { margin: 36px 0 60px; padding: 25px 20px; }
   form { grid-template-columns: 1fr; }
-  label:nth-of-type(3), label:nth-of-type(4), .add-button { grid-column: auto; }
+  label:nth-of-type(3), label:nth-of-type(4), .add-button, .save-button { grid-column: auto; }
   .login-body { padding: 24px 16px; }
   .login-shell { padding: 0; }
   .login-card { padding: 29px 23px; }

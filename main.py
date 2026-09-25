@@ -1,3 +1,4 @@
+from backend.application import app
 from backend.server import run
 
 

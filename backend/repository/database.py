@@ -3,17 +3,27 @@
 import json
 import sqlite3
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
 
 from backend.config import DATABASE_FILE, TEACHERS_FILE
 
 
-def get_connection() -> sqlite3.Connection:
+@contextmanager
+def get_connection() -> Iterator[sqlite3.Connection]:
     DATABASE_FILE.parent.mkdir(parents=True, exist_ok=True)
     connection = sqlite3.connect(DATABASE_FILE, timeout=5)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     connection.execute("PRAGMA busy_timeout = 5000")
-    return connection
+    try:
+        yield connection
+        connection.commit()
+    except Exception:
+        connection.rollback()
+        raise
+    finally:
+        connection.close()
 
 
 def initialize_database() -> None:
@@ -26,10 +36,19 @@ def initialize_database() -> None:
                 subject TEXT NOT NULL,
                 bio TEXT NOT NULL,
                 photo TEXT NOT NULL,
-                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                is_visible INTEGER NOT NULL DEFAULT 1
             )
             """
         )
+        columns = {
+            row["name"]
+            for row in connection.execute("PRAGMA table_info(teachers)").fetchall()
+        }
+        if "is_visible" not in columns:
+            connection.execute(
+                "ALTER TABLE teachers ADD COLUMN is_visible INTEGER NOT NULL DEFAULT 1"
+            )
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS app_metadata (

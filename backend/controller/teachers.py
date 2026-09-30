@@ -13,6 +13,7 @@ from backend.service.teacher_service import (
     delete_teacher,
     get_teacher,
     load_teachers,
+    toggle_teacher_visibility,
     update_teacher,
 )
 from backend.view.page_renderer import render_admin_teacher_list
@@ -40,7 +41,7 @@ def teachers_list() -> list[TeacherResponse]:
 @router.get("/{teacher_id}", response_model=TeacherResponse)
 def teacher_detail(teacher_id: str) -> TeacherResponse:
     teacher = get_teacher(teacher_id)
-    if teacher is None:
+    if teacher is None or not teacher.is_visible:
         raise HTTPException(status_code=404, detail="Преподаватель не найден")
     return TeacherResponse.from_entity(teacher)
 
@@ -115,6 +116,18 @@ async def edit_teacher(
         if photo:
             await photo.close()
 
+    if teachers is None:
+        raise HTTPException(status_code=404, detail="Преподаватель не найден")
+    return HTMLResponse(render_admin_teacher_list(teachers))
+
+
+@router.patch("/{teacher_id}/visibility", response_class=HTMLResponse)
+def change_teacher_visibility(teacher_id: str, request: Request) -> Response:
+    authentication_error = _require_admin(request)
+    if authentication_error:
+        return authentication_error
+
+    teachers = toggle_teacher_visibility(teacher_id)
     if teachers is None:
         raise HTTPException(status_code=404, detail="Преподаватель не найден")
     return HTMLResponse(render_admin_teacher_list(teachers))

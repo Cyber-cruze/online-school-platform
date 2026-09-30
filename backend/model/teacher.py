@@ -13,6 +13,7 @@ class Teacher(BaseEntity):
     bio: str
     photo: str
     created_at: str | None = None
+    is_visible: bool = True
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Teacher":
@@ -23,7 +24,8 @@ class Teacher(BaseEntity):
             bio=str(data.get("bio", "")),
             photo=str(data.get("photo", "")),
             created_at=str(data["created_at"]) if data.get("created_at") else None,
+            is_visible=bool(data.get("is_visible", True)),
         )
 
-    def to_dict(self) -> dict[str, str]:
+    def to_dict(self) -> dict[str, Any]:
         return asdict(self)

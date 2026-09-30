@@ -12,6 +12,7 @@ class TeacherResponse(BaseModel):
     bio: str
     photo: str
     created_at: str | None = None
+    is_visible: bool = True
 
     @classmethod
     def from_entity(cls, teacher: Teacher) -> "TeacherResponse":

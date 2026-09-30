@@ -52,14 +52,17 @@ input[type="file"] { padding: 11px; background: rgba(255, 255, 255, .82); }
 
 #teacher-list { display: grid; grid-template-columns: 1fr; gap: 24px; }
 .teacher-card { padding: 32px; border: 1px solid #e3e5e1; border-radius: 20px; background: var(--white); box-shadow: 0 8px 30px rgba(32, 32, 32, .05); }
+.teacher-card-hidden { border-style: dashed; background: #f7f8f6; }
+.teacher-card-hidden > .teacher-card-head > img { opacity: .65; filter: grayscale(.65); }
 .teacher-card-head { display: grid; grid-template-columns: 260px minmax(0, 1fr); align-items: center; }
 .teacher-card img { display: block; justify-self: center; width: 220px; height: 220px; border: 8px solid #eaf7fd; border-radius: 50%; background: var(--white); box-shadow: 0 12px 30px rgba(32, 32, 32, .1); object-fit: cover; object-position: center 25%; }
 .teacher-card-identity { display: flex; align-items: flex-start; flex-direction: column; padding: 8px 12px 8px 24px; }
 .teacher-card h2 { margin: 0 0 12px 12px; font-size: 24px; line-height: 1.2; white-space: pre-wrap; }
 .teacher-card span { display: inline-flex; padding: 8px 12px; border-radius: 50px; background: var(--sky); font-size: 15px; font-weight: 800; white-space: pre-wrap; }
+.visibility-status { margin-top: 12px; color: #68736d; font-size: 13px; font-weight: 800; }
 .teacher-card p { width: 100%; margin: 22px 0 0; padding-top: 20px; border-top: 1px solid #e3e5e1; font-size: 18px; line-height: 1.7; white-space: pre-wrap; }
 .teacher-card-actions { display: flex; align-items: center; justify-content: flex-start; gap: 18px; width: 100%; margin-top: 24px; }
-.edit-button, .delete { padding: 10px 14px; border-radius: 8px; background: var(--white); cursor: pointer; font-size: 14px; font-weight: 800; }
+.edit-button, .visibility-button, .delete { padding: 10px 14px; border-radius: 8px; background: var(--white); cursor: pointer; font-size: 14px; font-weight: 800; }
 .teacher-editor { width: 100%; margin-top: 18px; }
 .teacher-editor[hidden] { display: none; }
 .teacher-editor form { width: 100%; padding: 22px; border-radius: 14px; background: #f2f9fc; }
@@ -67,6 +70,8 @@ input[type="file"] { padding: 11px; background: rgba(255, 255, 255, .82); }
 .save-button { grid-column: 1 / -1; justify-self: start; padding: 13px 18px; border: 0; border-radius: 9px; background: var(--ink); color: var(--white); cursor: pointer; font-weight: 800; }
 .delete { border: 1px solid rgba(181, 78, 66, .2); color: var(--danger); }
 .edit-button { border-color: #76bfdf; background: var(--white); color: #3b8daf; }
+.visibility-button { border: 1px solid rgba(166, 119, 30, .28); color: #9a6a12; }
+.visibility-button:hover { background: #fff9e9; }
 .empty { margin: 0; padding: 38px; border: 1px dashed #bcc7c0; border-radius: 14px; font-size: 16px; text-align: center; }
 
 .login-body {

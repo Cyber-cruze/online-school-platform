@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Стимул — онлайн-школа</title>
+  <link rel="icon" href="/diploma.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/site.css">
-  <script src="/static/js/application.js" defer></script>
+  <script src="/static/js/application.js?v=3" defer></script>
 </head>
 <body>
   <div class="site-header">
@@ -40,17 +41,13 @@
       </div>
       <div class="hero-art" id="application">
         <div id="application-result" class="application-result">
-          <form class="lead-form" id="application-form" action="https://api.web3forms.com/submit" method="POST">
+          <form class="lead-form" id="application-form" action="/applications" method="POST">
             <h2>Оставить заявку</h2>
             <p>Познакомимся и подберём удобное время для занятия.</p>
-            <input type="hidden" name="access_key" value="6f7c5b18-8651-4a1c-83ad-89c42d1ad9d4">
-            <input type="hidden" name="subject" value="Заявка на консультацию — школа Стимул">
-            <input type="hidden" name="from_name" value="Онлайн-школа Стимул">
-            <input type="hidden" name="message" value="Посетитель оставил контакты для обратной связи.">
             <input class="botcheck" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off">
-            <input required name="name" placeholder="Ваше имя" aria-label="Ваше имя">
-            <input required name="phone" type="tel" placeholder="Телефон" aria-label="Телефон">
-            <input required name="email" type="email" placeholder="Электронная почта" aria-label="Электронная почта">
+            <input required maxlength="120" name="name" placeholder="Ваше имя" aria-label="Ваше имя">
+            <input required maxlength="40" name="phone" type="tel" placeholder="Телефон" aria-label="Телефон">
+            <input required maxlength="254" name="email" type="email" placeholder="Электронная почта" aria-label="Электронная почта">
             <button type="submit">Отправить заявку</button>
             <p class="lead-status" id="application-status" aria-live="polite"></p>
           </form>
@@ -97,6 +94,17 @@
         <p class="footer-description">Помогаем детям и подросткам разобраться в школьной программе, подготовиться к экзаменам и почувствовать уверенность в своих знаниях.</p>
         <a class="footer-cta" href="#application">Оставить заявку <span aria-hidden="true">↗</span></a>
       </div>
+      <section class="location" id="location">
+        <div class="location-card">
+          <div class="location-head">
+            <h2>Наш офис</h2>
+            <a class="location-link" href="https://yandex.ru/maps/org/stimul/32662330310/?ll=37.529042%2C55.423370&amp;z=15" target="_blank" rel="noopener noreferrer">Открыть в Яндекс Картах <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="location-map">
+            <iframe src="https://yandex.ru/map-widget/v1/?ll=37.529042%2C55.423370&amp;mode=search&amp;oid=32662330310&amp;ol=biz&amp;z=15" title="Офис школы Стимул на Яндекс Картах" loading="lazy" allowfullscreen></iframe>
+          </div>
+        </div>
+      </section>
       <div class="footer-contact-card">
         <p class="footer-contact-title">Контакты</p>
         <a href="tel:+79055188365">
@@ -114,6 +122,7 @@
         <a href="#features">О занятиях</a>
         <a href="#teachers">Преподаватели</a>
         <a href="#format">Формат</a>
+        <a href="#location">Офис</a>
       </nav>
       <span>© 2026 Стимул</span>
       <a href="#top">Наверх ↑</a>

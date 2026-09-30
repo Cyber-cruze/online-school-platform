@@ -6,9 +6,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.cors import CORSMiddleware
 
 from backend.config import LOGO_FILE, STATIC_DIR, UPLOADS_DIR
-from backend.controller import auth, pages, teachers
+from backend.controller import applications, auth, pages, teachers
 from backend.repository.database import initialize_database
 
 
@@ -29,6 +30,7 @@ def create_app() -> FastAPI:
     application.include_router(pages.router)
     application.include_router(auth.router)
     application.include_router(teachers.router)
+    application.include_router(applications.router)
 
     @application.get("/diploma.png", include_in_schema=False)
     def logo() -> FileResponse:

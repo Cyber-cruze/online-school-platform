@@ -13,38 +13,33 @@ applicationForm?.addEventListener("submit", async (event) => {
 
   try {
     const formData = new FormData(applicationForm);
-    const name = String(formData.get("name") || "").trim();
-    const phone = String(formData.get("phone") || "").trim();
-    const email = String(formData.get("email") || "").trim();
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      botcheck: formData.get("botcheck") ? "filled" : "",
+    };
 
-    formData.set("subject", "Заявка на консультацию — школа Стимул");
-    formData.set("from_name", "Онлайн-школа Стимул");
-    formData.set(
-      "message",
-      [
-        "Получена заявка с сайта онлайн-школы «Стимул».",
-        "",
-        `Имя: ${name}`,
-        `Телефон: ${phone}`,
-        `Электронная почта: ${email}`,
-        "",
-        "Посетитель ожидает обратной связи по указанным контактам.",
-      ].join("\n"),
-    );
-    formData.delete("name");
-    formData.delete("phone");
+    if (!payload.name || !payload.phone || !payload.email) {
+      throw new Error("validation");
+    }
 
     const response = await fetch(applicationForm.action, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
+    if (response.status === 422) throw new Error("validation");
+    if (!response.ok) throw new Error("delivery");
     const result = await response.json();
-    if (!response.ok || !result.success) throw new Error("Web3Forms rejected submission");
+    if (!result.success) throw new Error("delivery");
 
     document.querySelector("#application-result").innerHTML =
       '<p class="lead-success">Спасибо! Заявка отправлена, скоро свяжемся с вами.</p>';
   } catch (error) {
-    status.textContent = "Не удалось отправить заявку. Пожалуйста, попробуйте немного позже.";
+    status.textContent = error.message === "validation"
+      ? "Проверьте имя, телефон и электронную почту."
+      : "Не удалось отправить заявку. Пожалуйста, попробуйте немного позже.";
     button.disabled = false;
     button.textContent = originalLabel;
   }

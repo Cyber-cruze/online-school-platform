@@ -12,8 +12,8 @@ class InvalidImageError(ValueError):
     """Загруженный файл не является поддерживаемым изображением."""
 
 
-def load_teachers() -> list[Teacher]:
-    return teacher_repository.get_all()
+def load_teachers(*, include_hidden: bool = False) -> list[Teacher]:
+    return teacher_repository.get_all(include_hidden=include_hidden)
 
 
 def get_teacher(teacher_id: str) -> Teacher | None:
@@ -50,7 +50,7 @@ def add_teacher(
     except Exception:
         image_path.unlink(missing_ok=True)
         raise
-    return load_teachers()
+    return load_teachers(include_hidden=True)
 
 
 def update_teacher(
@@ -87,6 +87,7 @@ def update_teacher(
         bio=bio,
         photo=photo,
         created_at=current.created_at,
+        is_visible=current.is_visible,
     )
     try:
         updated = teacher_repository.update(updated_teacher)
@@ -102,13 +103,25 @@ def update_teacher(
 
     if new_image_path:
         _delete_uploaded_photo(current.photo)
-    return load_teachers()
+    return load_teachers(include_hidden=True)
+
+
+def toggle_teacher_visibility(teacher_id: str) -> list[Teacher] | None:
+    teacher = get_teacher(teacher_id)
+    if teacher is None:
+        return None
+    if not teacher_repository.set_visibility(
+        teacher_id,
+        is_visible=not teacher.is_visible,
+    ):
+        return None
+    return load_teachers(include_hidden=True)
 
 
 def delete_teacher(teacher_id: str) -> list[Teacher] | None:
     if not teacher_repository.delete(teacher_id):
         return None
-    return load_teachers()
+    return load_teachers(include_hidden=True)
 
 
 def _delete_uploaded_photo(photo_url: str) -> None:

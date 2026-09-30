@@ -1,5 +1,3 @@
-"""Пути и настройки приложения."""
-
 import os
 from pathlib import Path
 
@@ -20,6 +18,18 @@ LOGO_FILE = BASE_DIR / "diploma.png"
 
 HOST = "127.0.0.1"
 PORT = 8000
+
+GOOGLE_CREDENTIALS_FILE = BASE_DIR / "credentials.json"
+GOOGLE_TOKEN_FILE = BASE_DIR / "token.json"
+GMAIL_SENDER = os.getenv("GMAIL_SENDER", "sergejizotov03@gmail.com")
+APPLICATION_RECIPIENTS = tuple(
+    address.strip()
+    for address in os.getenv(
+        "APPLICATION_RECIPIENTS",
+        "sergejizotov98@gmail.com,nsusakin@yandex.ru,konstantan@list.ru",
+    ).split(",")
+    if address.strip()
+)
 
 
 

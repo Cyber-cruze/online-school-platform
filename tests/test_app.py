@@ -10,6 +10,7 @@ from backend.application import app
 from backend.model.teacher import Teacher
 from backend.repository.database import initialize_database
 from backend.service import auth_service
+from backend.service import email_service
 from backend.service.teacher_service import add_teacher, delete_teacher, load_teachers
 from backend.view.page_renderer import render_admin_teacher, render_login_page, render_public_teacher
 
@@ -129,6 +130,39 @@ class AuthenticationTests(unittest.TestCase):
 
 
 class FastAPIRouteTests(unittest.TestCase):
+    def test_application_is_sent_through_email_service(self) -> None:
+        with (
+            patch("backend.controller.applications.send_application_email") as send_email,
+            TestClient(app) as client,
+        ):
+            response = client.post(
+                "/applications",
+                json={
+                    "name": "Анна Смирнова",
+                    "phone": "+7 900 123-45-67",
+                    "email": "anna@example.com",
+                },
+            )
+
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.json(), {"success": True})
+        application = send_email.call_args.args[0]
+        self.assertEqual(application.email, "anna@example.com")
+
+    def test_application_email_has_reply_to_and_separate_recipient(self) -> None:
+        application = email_service.ApplicationCreate(
+            name="Анна Смирнова",
+            phone="+7 900 123-45-67",
+            email="anna@example.com",
+        )
+
+        message = email_service._build_message(application, "office@example.com")
+
+        self.assertEqual(message["To"], "office@example.com")
+        self.assertEqual(message["Reply-To"], "anna@example.com")
+        self.assertEqual(message["From"].addresses[0].addr_spec, "sergejizotov03@gmail.com")
+        self.assertIn("Анна Смирнова", message.get_content())
+
     def test_admin_flow_and_teacher_endpoints(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
@@ -213,6 +247,20 @@ class FastAPIRouteTests(unittest.TestCase):
                 self.assertNotEqual(teacher["photo"], original_photo)
                 self.assertEqual(len(list(uploads_dir.iterdir())), 1)
 
+                hidden = client.patch(f"/teachers/{teacher_id}/visibility")
+                self.assertEqual(hidden.status_code, 200)
+                self.assertIn("Вернуть", hidden.text)
+                self.assertIn("Скрыт с основной страницы", hidden.text)
+                self.assertEqual(client.get("/teachers").json(), [])
+                self.assertEqual(client.get(f"/teachers/{teacher_id}").status_code, 404)
+                self.assertNotIn("Сергей Петров", client.get("/").text)
+                self.assertIn("Сергей Петров", client.get("/admin").text)
+
+                restored = client.patch(f"/teachers/{teacher_id}/visibility")
+                self.assertEqual(restored.status_code, 200)
+                self.assertIn("Скрыть", restored.text)
+                self.assertEqual(len(client.get("/teachers").json()), 1)
+
                 deleted = client.delete(f"/teachers/{teacher_id}")
                 self.assertEqual(deleted.status_code, 200)
                 self.assertEqual(client.get("/teachers").json(), [])
@@ -228,11 +276,17 @@ class FastAPIRouteTests(unittest.TestCase):
                 data={"name": "Тест", "subject": "Тест", "bio": "Тест"},
                 headers={"HX-Request": "true"},
             )
+            visibility_response = client.patch(
+                "/teachers/" + "a" * 32 + "/visibility",
+                headers={"HX-Request": "true"},
+            )
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.headers["HX-Redirect"], "/admin/login")
         self.assertEqual(update_response.status_code, 401)
         self.assertEqual(update_response.headers["HX-Redirect"], "/admin/login")
+        self.assertEqual(visibility_response.status_code, 401)
+        self.assertEqual(visibility_response.headers["HX-Redirect"], "/admin/login")
 
 
 if __name__ == "__main__":

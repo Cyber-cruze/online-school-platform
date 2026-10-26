@@ -1,0 +1,32 @@
+name: stimulus
+services:
+  app:
+    image: ${APP_IMAGE:-stimulus}:${IMAGE_TAG:-local}
+    restart: unless-stopped
+    init: true
+    mem_limit: 768m
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - ${STIMULUS_SHARED_DIR:-/opt/stimulus/shared}/.env
+    environment:
+      DATABASE_FILE: /app/data/stimulus.sqlite3
+      UPLOADS_DIR: /app/uploads
+      TEACHERS_FILE: /app/teachers.json
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+    volumes:
+      - type: bind
+        source: ${STIMULUS_SHARED_DIR:-/opt/stimulus/shared}/data
+        target: /app/data
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${STIMULUS_SHARED_DIR:-/opt/stimulus/shared}/uploads
+        target: /app/uploads
+        bind:
+          create_host_path: false
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -21,7 +21,7 @@ def create_application(application: ApplicationCreate) -> dict[str, bool]:
     try:
         send_application_email(application)
     except EmailDeliveryError as error:
-        logger.exception("Не удалось отправить заявку через Gmail")
+        logger.exception("Не удалось отправить заявку через SMTP")
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Не удалось отправить заявку",

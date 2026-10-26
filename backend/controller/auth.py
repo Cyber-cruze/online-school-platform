@@ -5,6 +5,7 @@ from typing import Annotated
 from fastapi import APIRouter, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
+from backend.config import COOKIE_SECURE
 from backend.service.auth_service import (
     SESSION_COOKIE_NAME,
     credentials_are_valid,
@@ -28,6 +29,7 @@ def login(
     response.set_cookie(
         key=SESSION_COOKIE_NAME,
         value=session_token(),
+        secure=COOKIE_SECURE,
         httponly=True,
         samesite="strict",
     )
@@ -39,6 +41,7 @@ def logout() -> Response:
     response = RedirectResponse("/admin/login", status_code=303)
     response.delete_cookie(
         key=SESSION_COOKIE_NAME,
+        secure=COOKIE_SECURE,
         httponly=True,
         samesite="strict",
     )

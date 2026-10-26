@@ -1,14 +1,15 @@
 # Онлайн-школа «Стимул»
 
-Сайт онлайн-школы на FastAPI. В проекте есть публичная страница, отправка заявок через Gmail API, панель управления преподавателями и база данных SQLite.
+Сайт онлайн-школы на FastAPI. В проекте есть публичная страница, отправка заявок через SMTP, панель управления преподавателями и база данных SQLite.
 
 ## Запуск
 
-Нужен Python 3.10 или новее. Создайте виртуальное окружение и установите зависимости:
+Для воспроизводимого окружения используйте Python 3.12. Создайте виртуальное окружение и установите зависимости:
 
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
+cp .env.example .env
 .venv/bin/python main.py
 ```
 
@@ -22,18 +23,24 @@ cp .env.example .env
 
 Переменные окружения процесса имеют приоритет над значениями из `.env`.
 
-Для отправки заявок включите Gmail API в Google Cloud и скачайте OAuth-клиент
-типа Desktop app в файл `credentials.json`. Затем выполните одноразовую
-авторизацию:
+Для отправки заявок задайте в `.env`:
 
-```bash
-.venv/bin/python authorize_gmail.py
+```dotenv
+COOKIE_SECURE=true # local - false; prod - true
+ADMIN_USERNAME=STIMUL
+ADMIN_PASSWORD=your-password
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USERNAME=mail
+SMTP_APP_PASSWORD=your-password
+GMAIL_SENDER=mail
+APPLICATION_RECIPIENTS=mails
 ```
 
-После согласия в браузере появится локальный `token.json`. Оба JSON-файла
-игнорируются Git. Gmail-адрес отправителя задаётся в `GMAIL_SENDER`, а
-получатели перечисляются через запятую в `APPLICATION_RECIPIENTS`; каждому из
-них отправляется отдельное письмо.
+`SMTP_USERNAME` — полный адрес отправителя, `SMTP_APP_PASSWORD` — пароль приложения Google, а не обычный пароль аккаунта.
+`GMAIL_SENDER` - почта отправителя
+`APPLICATION_RECIPIENTS` - почты которые будут оповещены
+`ADMIN_PASSWORD` - пароль от админ панели
 
 ## Структура
 
@@ -72,8 +79,12 @@ teachers.json       старые данные для одноразового и
 
 Интерактивная документация API доступна по адресу <http://127.0.0.1:8000/docs>.
 
+Деплой выполняется вручную: [инструкция для Ubuntu 24.04](docs/deployment.md).
+Тесты, сборка образа и обновление сервера запускаются вручную.
+
 ## Проверка
 
 ```bash
+.venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python -m unittest discover -s tests -v
 ```
